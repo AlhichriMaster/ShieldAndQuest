@@ -13,8 +13,12 @@
         </div>
 
         <script>
+            const API_URL = window.location.hostname === 'localhost'
+              ? 'http://localhost:8080'
+              : 'https://shieldandquest-production.up.railway.app';
+
             async function startGame() {
-                const response = await fetch('http://localhost:8080/api/game', {
+                const response = await fetch(`${API_URL}/api/game`, {
                     method: 'GET'
                 });
                 gameState = await response.json();
