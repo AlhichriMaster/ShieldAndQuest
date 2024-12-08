@@ -13,7 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {
+        "http://localhost:3000",     // Local development
+        "http://localhost:5000",     // Another common local port
+        "https://shieldandquest.netlify.app"      // Your Netlify domains
+}, allowCredentials = "true")
 @RequestMapping("/api/game")
 public class GameController {
     private final Game game;
