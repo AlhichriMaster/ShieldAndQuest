@@ -1,0 +1,209 @@
+.game-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.status-bar {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.deck-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.card-display {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    min-height: 100px;
+}
+
+.action-area {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.button.secondary {
+    background-color: #666;
+}
+
+.button.danger {
+    background-color: #f44336;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 4px;
+    width: 120px;
+    cursor: pointer;
+}
+
+.card.selected {
+    border-color: #4CAF50;
+    background-color: #e8f5e9;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    border: 1px solid #bbdefb;
+}
+
+.alert-warning {
+    background-color: #fff3e0;
+    border: 1px solid #ffe0b2;
+}
+
+.quest-setup {
+    padding: 20px;
+    margin: 10px 0;
+}
+
+.selected-cards {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.card.selected {
+    border: 2px solid #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.selected-card {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.card-selection {
+    margin-top: 20px;
+}
+
+.button.secondary {
+    background-color: #6c757d;
+    margin-left: 10px;
+}
+
+
+.quest-participation, .quest-attack {
+    padding: 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.quest-info {
+    margin-bottom: 20px;
+}
+
+.selected-attack-cards {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button.secondary {
+    background-color: #6c757d;
+    margin-left: 10px;
+}
+
+
+/* Add these styles to your existing style.css file */
+.player-stats {
+    margin: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.player-stat-card {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.player-stat-card.current-player {
+    border: 2px solid #4CAF50;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+}
