@@ -1,3 +1,7 @@
+const API_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:8080'
+  : 'https://shieldandquest-production.up.railway.app';
+
 // DOM Elements
 const drawButton = document.getElementById('draw-button');
 const drawnCard = document.getElementById('drawn-card');
@@ -28,7 +32,7 @@ let turnQuestWinners = new Set();
 // Initial setup
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const response = await fetch('http://localhost:8080/api/game');
+        const response = await fetch(`${API_URL}/api/game`);
         const data = await response.json();
         gameState = data;
         localPlayerId = gameState.currentPlayerId;
@@ -65,7 +69,7 @@ async function drawCard() {
     try {
         turnQuestWinners.clear();
         
-        const response = await fetch('http://localhost:8080/api/game/playTurn', {
+        const response = await fetch(`${API_URL}/api/game/playTurn`, {
             method: 'GET'
         });
         gameState = await response.json();
@@ -149,7 +153,7 @@ async function handleQuestCard() {
 
     // Get fresh game state
     try {
-        const response = await fetch('http://localhost:8080/api/game');
+        const response = await fetch(`${API_URL}/api/game`);
         const freshState = await response.json();
         gameState = freshState;
     } catch (error) {
@@ -176,7 +180,7 @@ async function handleNoSponsors() {
     currentSponsorshipIndex = 0; // Reset for next quest
     console.log("We should be calling end turn here")
     try {
-        const response = await fetch('http://localhost:8080/api/game/endTurn', {
+        const response = await fetch(`${API_URL}/api/game/endTurn`, {
             method: 'POST'
         });
         const newState = await response.json();
@@ -199,7 +203,7 @@ async function respondToSponsorship(accepting) {
         try {
             console.log("Attempting to sponsor quest with player:", localPlayerId);
             
-            const response = await fetch(`http://localhost:8080/api/game/quest/sponsor?playerId=${localPlayerId}`, {
+            const response = await fetch(`${API_URL}/api/game/quest/sponsor?playerId=${localPlayerId}`, {
                 method: 'POST'
             });
             
@@ -211,7 +215,7 @@ async function respondToSponsorship(accepting) {
             console.log("Sponsorship response:", result);
 
             // Get updated game state after sponsorship
-            const gameStateResponse = await fetch('http://localhost:8080/api/game');
+            const gameStateResponse = await fetch(`${API_URL}/api/game`);
             const newState = await gameStateResponse.json();
             console.log("Game state after sponsorship:", newState);
             
@@ -349,7 +353,7 @@ async function confirmStage() {
     }
 
     try {
-        const response = await fetch('http://localhost:8080/api/game/quest/setup-stage', {
+        const response = await fetch(`${API_URL}/api/game/quest/setup-stage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -362,7 +366,7 @@ async function confirmStage() {
         console.log("Stage Setup Result:", result);
         
         // Fetch current game state to get accurate quest information
-        const gameStateResponse = await fetch('http://localhost:8080/api/game');
+        const gameStateResponse = await fetch(`${API_URL}/api/game`);
         const newState = await gameStateResponse.json();
         gameState = newState;  // Update the game state
 
@@ -433,7 +437,7 @@ function showParticipationPrompt() {
 async function respondToParticipation(joining) {
     try {
         if (!joining) {
-            const response = await fetch(`http://localhost:8080/api/game/quest/participate?playerId=${localPlayerId}`, {
+            const response = await fetch(`${API_URL}/api/game/quest/participate?playerId=${localPlayerId}`, {
                 method: 'POST'
             });
             const result = await response.json();
@@ -445,7 +449,7 @@ async function respondToParticipation(joining) {
             return;
         }
 
-        const response = await fetch(`http://localhost:8080/api/game/quest/participate?playerId=${localPlayerId}`, {
+        const response = await fetch(`${API_URL}/api/game/quest/participate?playerId=${localPlayerId}`, {
             method: 'POST'
         });
         const result = await response.json();
@@ -542,7 +546,7 @@ async function confirmAttack() {
             return;
         }
 
-        const response = await fetch('http://localhost:8080/api/game/quest/attack', {
+        const response = await fetch(`${API_URL}/api/game/quest/attack`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -557,7 +561,7 @@ async function confirmAttack() {
 
         await handleStagesCleared(attackResult);
 
-        const gameStateResponse = await fetch('http://localhost:8080/api/game');
+        const gameStateResponse = await fetch(`${API_URL}/api/game`);
         const newGameState = await gameStateResponse.json();
         gameState = newGameState;
 
@@ -576,7 +580,7 @@ async function withdrawFromQuest() {
             stagesCleared: questParticipants.get(localPlayerId)?.stagesCleared || 0
         });
         
-        const response = await fetch(`http://localhost:8080/api/game/quest/withdraw?playerId=${localPlayerId}`, {
+        const response = await fetch(`${API_URL}/api/game/quest/withdraw?playerId=${localPlayerId}`, {
             method: 'POST'
         });
 
@@ -599,7 +603,7 @@ async function withdrawFromQuest() {
 
 
 async function handleStageStart() {
-    const drawResponse = await fetch(`http://localhost:8080/api/game/quest/drawParticipationCard?playerId=${localPlayerId}`, {
+    const drawResponse = await fetch(`${API_URL}/api/game/quest/drawParticipationCard?playerId=${localPlayerId}`, {
         method: 'POST'
     });
     const newState = await drawResponse.json();
@@ -703,7 +707,7 @@ async function endQuest() {
             console.log("Processing winners for current quest:", currentQuestWinners);
             
             // Add shields just for this quest's winners
-            const shieldResponse = await fetch('http://localhost:8080/api/game/quest/addShield', {
+            const shieldResponse = await fetch(`${API_URL}/api/game/quest/addShield`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -735,7 +739,7 @@ async function endQuest() {
         }
 
         // Complete the quest and reward sponsor
-        const completionResponse = await fetch('http://localhost:8080/api/game/quest/complete', {
+        const completionResponse = await fetch(`${API_URL}/api/game/quest/complete`, {
             method: 'POST'
         });
         
@@ -751,7 +755,7 @@ async function endQuest() {
         }
 
         // Explicitly end the turn
-        const endResponse = await fetch('http://localhost:8080/api/game/endTurn', {
+        const endResponse = await fetch(`${API_URL}/api/game/endTurn`, {
             method: 'POST'
         });
 
@@ -826,13 +830,13 @@ async function handlePlagueCard() {
 async function handlePlague() {
     try {
         // Handle the plague effect
-        const response = await fetch('http://localhost:8080/api/game/handlePlague', {
+        const response = await fetch(`${API_URL}/api/game/handlePlague`, {
             method: 'POST'
         });
         const newState = await response.json();
         
         // End the turn
-        const endResponse = await fetch('http://localhost:8080/api/game/endTurn', {
+        const endResponse = await fetch(`${API_URL}/api/game/endTurn`, {
             method: 'POST'
         });
         const finalState = await endResponse.json();
@@ -867,7 +871,7 @@ async function handlePlague() {
 /////////////////////////////////////HANDLE PROSPERITY AND QUEENS CARDS///////////////////////////////////////////////
 async function handleQandP() {
     try {
-        const response = await fetch('http://localhost:8080/api/game/handleQandP', {
+        const response = await fetch(`${API_URL}/api/game/handleQandP`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });
@@ -945,7 +949,7 @@ async function confirmTrim() {
     });
 
     try {
-        const response = await fetch('http://localhost:8080/api/game/discardCards', {
+        const response = await fetch(`${API_URL}/api/game/discardCards`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -963,7 +967,7 @@ async function confirmTrim() {
             handleQuestAttack();
         } else {
             if (!checkHandSizes()) {
-                const endResponse = await fetch('http://localhost:8080/api/game/endTurn', { method: 'POST' });
+                const endResponse = await fetch(`${API_URL}/api/game/endTurn`, { method: 'POST' });
                 const finalState = await endResponse.json();
                 gameState = finalState;
                 localPlayerId = finalState.currentPlayerId;
