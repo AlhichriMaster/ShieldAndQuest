@@ -1,31 +1,83 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <title>Quest Game</title>
-        <h1>
-            4004 Card Game
-        </h1>
-    </header>
+<head>
+    <title>Quest Game</title>
+    <style>
+        <link rel="stylesheet" href="indexStyle.css">
+    </style>
+</head>
+<body>
+<header>
+    <h1>Quest Game</h1>
+    <p>A multiplayer card game of adventure and strategy</p>
+</header>
 
-    <body>
-        <div id="game-controls">
-            <button onclick="startGame()" class="button">Start Game</button>
+<div class="container">
+    <div class="game-description">
+        <h2>About the Game</h2>
+        <p>Welcome to Quest, a strategic multiplayer card game where players compete to become knights by completing quests and earning shields. The first player(s) to accumulate 7 shields will be declared the winner(s)!</p>
+
+        <div class="key-points">
+            <h3>Key Features:</h3>
+            <ul>
+                <li>4 players compete in turns</li>
+                <li>Strategic deck building and quest sponsorship</li>
+                <li>Multiple paths to victory</li>
+                <li>Complex player interactions and decision-making</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="rules-section">
+        <h2>Game Overview</h2>
+
+        <div class="card-types">
+            <div class="card-type">
+                <h3>Adventure Cards</h3>
+                <ul>
+                    <li>Foe Cards (F5-F70)</li>
+                    <li>Weapon Cards (Daggers, Horses, Swords, Battle-axes, Lances, Excaliburs)</li>
+                    <li>Each player starts with 12 cards</li>
+                </ul>
+            </div>
+            <div class="card-type">
+                <h3>Event Cards</h3>
+                <ul>
+                    <li>Quest Cards (Q2-Q5)</li>
+                    <li>Plague (-2 shields)</li>
+                    <li>Queen's Favor (draw 2 cards)</li>
+                    <li>Prosperity (all draw 2 cards)</li>
+                </ul>
+            </div>
         </div>
 
-        <script>
-            const API_URL = window.location.hostname === 'localhost'
-              ? 'http://localhost:8080'
-              : 'https://shieldandquest-production.up.railway.app';
+        <h3>Important Rules:</h3>
+        <ul>
+            <li>Players must maintain a maximum of 12 adventure cards in their hand</li>
+            <li>Quest stages must increase in value from stage to stage</li>
+            <li>Each quest stage requires one Foe card and can have multiple unique Weapon cards</li>
+            <li>Players can participate in quests by matching or exceeding stage values with weapon cards</li>
+            <li>Winning a quest awards shields equal to the number of stages completed</li>
+        </ul>
+    </div>
 
-            async function startGame() {
-                const response = await fetch(`${API_URL}/api/game`, {
-                    method: 'GET'
-                });
-                gameState = await response.json();
+    <div id="game-controls">
+        <button onclick="startGame()" class="button">Start Game</button>
+    </div>
+</div>
 
-                // Load the startgame.html content
-                window.location.href = 'startgame.html';
-            }
-        </script>
-    </body>
+<script>
+    const API_URL = window.location.hostname === 'localhost'
+        ? 'http://localhost:8080'
+        : 'https://shieldandquest-production.up.railway.app';
+
+    async function startGame() {
+        const response = await fetch(`${API_URL}/api/game`, {
+            method: 'GET'
+        });
+        gameState = await response.json();
+        window.location.href = 'startgame.html';
+    }
+</script>
+</body>
 </html>
