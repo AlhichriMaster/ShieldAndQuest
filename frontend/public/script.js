@@ -138,7 +138,7 @@ async function handleQuestCard() {
         
         // If we've cycled back to start, no sponsors available
         if (currentIndex === startingIndex || currentSponsorshipIndex >= PLAYER_ORDER.length * 2) {
-            console.log("No sponsors found (all declined), ending turn");
+            //console.log("No sponsors found (all declined), ending turn");
             await handleNoSponsors();
             return;
         }
@@ -146,7 +146,7 @@ async function handleQuestCard() {
     
     // If we've made it back to the starting player
     if (currentIndex === startingIndex && currentSponsorshipIndex > startingIndex) {
-        console.log("No sponsors found, ending turn");
+        //console.log("No sponsors found, ending turn");
         await handleNoSponsors();
         return;
     }
@@ -162,7 +162,7 @@ async function handleQuestCard() {
 
     const currentPotentialSponsor = PLAYER_ORDER[currentIndex];
     localPlayerId = currentPotentialSponsor;
-    console.log(`Asking ${localPlayerId} to sponsor quest (declined sponsors: ${Array.from(declinedSponsors)})`);
+    //console.log(`Asking ${localPlayerId} to sponsor quest (declined sponsors: ${Array.from(declinedSponsors)})`);
     displaySponsorshipPrompt(currentPotentialSponsor);
 }
 
@@ -178,7 +178,7 @@ function displaySponsorshipPrompt(playerId) {
 
 async function handleNoSponsors() {
     currentSponsorshipIndex = 0; // Reset for next quest
-    console.log("We should be calling end turn here")
+    //console.log("We should be calling end turn here")
     try {
         const response = await fetch(`${API_URL}/api/game/endTurn`, {
             method: 'POST'
@@ -201,7 +201,7 @@ async function handleNoSponsors() {
 async function respondToSponsorship(accepting) {
     if (accepting) {
         try {
-            console.log("Attempting to sponsor quest with player:", localPlayerId);
+            //console.log("Attempting to sponsor quest with player:", localPlayerId);
             
             const response = await fetch(`${API_URL}/api/game/quest/sponsor?playerId=${localPlayerId}`, {
                 method: 'POST'
@@ -212,12 +212,12 @@ async function respondToSponsorship(accepting) {
             }
             
             const result = await response.json();
-            console.log("Sponsorship response:", result);
+            //console.log("Sponsorship response:", result);
 
             // Get updated game state after sponsorship
             const gameStateResponse = await fetch(`${API_URL}/api/game`);
             const newState = await gameStateResponse.json();
-            console.log("Game state after sponsorship:", newState);
+            //console.log("Game state after sponsorship:", newState);
             
             if (!result.error) {
                 // Reset quest-related state
@@ -225,7 +225,7 @@ async function respondToSponsorship(accepting) {
                 currentSponsorshipIndex = 0;
                 gameState = newState;
                 
-                console.log(`Starting new quest setup with ${gameState.currentQuest.stages} stages`);
+                //console.log(`Starting new quest setup with ${gameState.currentQuest.stages} stages`);
                 handleQuestSetup();
             } else {
                 console.error('Error in sponsorship:', result.error);
@@ -242,7 +242,7 @@ async function respondToSponsorship(accepting) {
 
 
 async function handleQuestSetup() {
-    console.log(`Setting up quest stage ${currentStage} of ${gameState.currentQuest.stages}`);
+    //console.log(`Setting up quest stage ${currentStage} of ${gameState.currentQuest.stages}`);
     
     // Double check we have correct stage count
     if (currentStage > gameState.currentQuest.stages) {
@@ -274,11 +274,11 @@ async function handleQuestSetup() {
 
 
 function moveToNextSponsor() {
-    console.log("WE ACTUALLY GOT INTO MOVE, DECLINE BUTTON WAS ACTUALLY CLICKED");
+    //console.log("WE ACTUALLY GOT INTO MOVE, DECLINE BUTTON WAS ACTUALLY CLICKED");
     
     // Add current player to declined sponsors
     declinedSponsors.add(localPlayerId);
-    console.log(`Added ${localPlayerId} to declined sponsors`);
+    //console.log(`Added ${localPlayerId} to declined sponsors`);
     
     currentSponsorshipIndex++;
     handleQuestCard();
@@ -327,7 +327,7 @@ function toggleCardSelection(cardId) {
         });
 
         if (hasFoeCard && !selectedCards.has(cardId)) {
-            //alert('Only one foe card can be selected per stage');
+            alert('Only one foe card can be selected per stage');
             return;
         }
     }
@@ -344,11 +344,11 @@ function toggleCardSelection(cardId) {
 
 
 async function confirmStage() {
-    console.log("Current Stage:", currentStage);
-    console.log("Total Quest Stages:", gameState.currentQuest.stages);
+    //console.log("Current Stage:", currentStage);
+    //console.log("Total Quest Stages:", gameState.currentQuest.stages);
 
     if (selectedCards.size === 0) {
-        //alert('Please select at least one card for the stage');
+        alert('Please select at least one card for the stage');
         return;
     }
 
@@ -363,7 +363,7 @@ async function confirmStage() {
         });
 
         const result = await response.json();
-        console.log("Stage Setup Result:", result);
+        //console.log("Stage Setup Result:", result);
         
         // Fetch current game state to get accurate quest information
         const gameStateResponse = await fetch(`${API_URL}/api/game`);
@@ -373,7 +373,7 @@ async function confirmStage() {
         // Check if we've completed all stages
         if (currentStage >= gameState.currentQuest.stages) {
             // Quest setup complete
-            console.log("Quest setup complete, moving to participation phase");
+            //console.log("Quest setup complete, moving to participation phase");
             currentStage = 1;
             selectedCards.clear();
             document.getElementById('current-hand').style.display = 'block';
@@ -381,7 +381,7 @@ async function confirmStage() {
             handleParticipationSequence();
         } else {
             // Setup next stage
-            console.log(`Moving to stage ${currentStage + 1} of ${gameState.currentQuest.stages}`);
+            //console.log(`Moving to stage ${currentStage + 1} of ${gameState.currentQuest.stages}`);
             selectedCards.clear();
             currentStage++;
             handleQuestSetup();
@@ -390,7 +390,7 @@ async function confirmStage() {
         updateGameDisplay();
     } catch (error) {
         console.error('Error setting up quest stage:', error);
-        //alert('Failed to set up stage. Please try again.');
+        alert('Failed to set up stage. Please try again.');
     }
 }
 
@@ -517,7 +517,7 @@ function toggleAttackCard(cardId) {
     
     // Only allow weapon cards for attack
     if (card.type !== 'WEAPON') {
-        //alert('Only weapon cards can be used in an attack');
+        alert('Only weapon cards can be used in an attack');
         return;
     }
 
@@ -597,7 +597,7 @@ async function withdrawFromQuest() {
         }
     } catch (error) {
         console.error('Error withdrawing from quest:', error);
-        //alert('Failed to withdraw from quest. Please try again.');
+        alert('Failed to withdraw from quest. Please try again.');
     }
 }
 
@@ -631,7 +631,7 @@ async function handleStagesCleared(attackResult) {
             updatedStatus.active && 
             localPlayerId !== gameState.currentQuest.sponsorId) {
             questWinners.push(localPlayerId);
-            console.log(`${localPlayerId} completed quest and added to winners list`);
+            //console.log(`${localPlayerId} completed quest and added to winners list`);
         }
     } else {
         questParticipants.set(localPlayerId, {
@@ -679,7 +679,7 @@ async function moveToNextActivePlayer() {
     });
 
     if (!hasActivePlayers || currentStage >= gameState.currentQuest.stages) {
-        console.log("Quest stage complete. Current shield counts:", 
+        //console.log("Quest stage complete. Current shield counts:", 
             gameState.players.map(p => `${p.id}: ${p.shields}`));
     }
 
@@ -699,12 +699,12 @@ async function moveToNextActivePlayer() {
 async function endQuest() {
     try {        
         if (questWinners.length > 0) {
-            console.log("Quest winners before shield award:", questWinners);
+            //console.log("Quest winners before shield award:", questWinners);
             const sponsorId = gameState.currentQuest.sponsorId;
             // Filter out sponsor from winners but don't modify original array
             const currentQuestWinners = questWinners.filter(winnerId => winnerId !== sponsorId);
             
-            console.log("Processing winners for current quest:", currentQuestWinners);
+            //console.log("Processing winners for current quest:", currentQuestWinners);
             
             // Add shields just for this quest's winners
             const shieldResponse = await fetch(`${API_URL}/api/game/quest/addShield`, {
@@ -725,14 +725,14 @@ async function endQuest() {
             
             // Add to cumulative winners after shields are awarded
             currentQuestWinners.forEach(winner => turnQuestWinners.add(winner));
-            console.log("Cumulative winners this turn:", Array.from(turnQuestWinners));
+            //console.log("Cumulative winners this turn:", Array.from(turnQuestWinners));
             
             // Now check for any players who have reached winning condition
             const winners = gameState.players.filter(player => player.shields >= 7);
-            console.log("Current shield counts:", gameState.players.map(p => `${p.id}: ${p.shields}`));
+            //console.log("Current shield counts:", gameState.players.map(p => `${p.id}: ${p.shields}`));
             
             if (winners.length > 0) {
-                console.log("Game over! Winners:", winners.map(w => w.id).join(', '));
+                //console.log("Game over! Winners:", winners.map(w => w.id).join(', '));
                 handleGameOver();
                 return;
             }
@@ -784,8 +784,8 @@ async function endQuest() {
         drawButton.style.display = 'block';
         
         // Log final state
-        console.log("Quest ended. Current player:", localPlayerId);
-        console.log("Final shield counts:", gameState.players.map(p => `${p.id}: ${p.shields}`));
+        //console.log("Quest ended. Current player:", localPlayerId);
+        //console.log("Final shield counts:", gameState.players.map(p => `${p.id}: ${p.shields}`));
         
         updateGameDisplay();
 
@@ -800,7 +800,7 @@ async function endQuest() {
 
 // Add this helper function to handle the draw card click event
 function forceDrawCard() {
-    console.log("Forcing draw card for player:", localPlayerId);
+    //console.log("Forcing draw card for player:", localPlayerId);
     drawButton.style.display = 'block';
     actionArea.innerHTML = `
         <button id="draw-button" onclick="drawCard()" class="button">Draw Card</button>
@@ -856,7 +856,7 @@ async function handlePlague() {
         updateGameDisplay();
     } catch (error) {
         console.error('Error handling plague:', error);
-        //alert('Failed to handle plague card. Please try again.');
+        alert('Failed to handle plague card. Please try again.');
     }
 }
 
