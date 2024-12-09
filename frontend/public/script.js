@@ -680,7 +680,7 @@ async function moveToNextActivePlayer() {
 
     if (!hasActivePlayers || currentStage >= gameState.currentQuest.stages) {
         //console.log("Quest stage complete. Current shield counts:", 
-            gameState.players.map(p => `${p.id}: ${p.shields}`));
+            gameState.players.map(p => `${p.id}: ${p.shields}`);
     }
 
     if (!hasActivePlayers) {
